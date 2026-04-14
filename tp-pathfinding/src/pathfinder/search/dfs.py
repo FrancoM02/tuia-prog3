@@ -22,7 +22,28 @@ class DepthFirstSearch:
         expanded = dict()
 
         # Initialize frontier with the root node
-        # TODO Complete the rest!!
-        # ...
+        expanded = {}
+        reached = {}
+        reached[root.state] = True
+
+        pila = StackFrontier()
+        nodo = root
+        pila.add(nodo)
+
+        while True:    
+            if pila.is_empty():
+                return NoSolution(expanded)
+            nodo = pila.remove()
+
+            for i in grid.actions(nodo.state):
+                sucesor=grid.result(nodo.state, i)
+                if sucesor in expanded:
+                    continue
+                else:
+                    nodo1 = Node(i, state=sucesor, cost=grid.individual_cost(nodo.state, i)+nodo.cost, parent=nodo, action=i)
+                    if grid.objective_test(sucesor):
+                        return Solution(nodo1, expanded)
+                    expanded[sucesor] = True
+                    pila.add(nodo1) 
 
         return NoSolution(expanded)
