@@ -22,12 +22,9 @@ class GreedyBestFirstSearch:
         reached = {}
         reached[root.state] = root.cost
 
-        if grid.objective_test(root.state):
-            return Solution(root, reached)  
-
         frontera = PriorityQueueFrontier()
         nodo = root
-        frontera.add(nodo, nodo.cost)
+        frontera.add(nodo, grid.heuristica_manhattan(nodo.state))
 
         while True:
             if frontera.is_empty():
@@ -45,4 +42,6 @@ class GreedyBestFirstSearch:
                 if sucesor not in reached or costo_sucesor < reached[sucesor]:
                     nodo_sucesor = Node(action, state=sucesor, cost=costo_sucesor, parent=nodo, action=action)
                     reached[sucesor] = costo_sucesor
-                    frontera.add(nodo_sucesor, costo_sucesor)
+                    frontera.add(nodo_sucesor, grid.heuristica_manhattan(sucesor))
+
+        return NoSolution(reached)
